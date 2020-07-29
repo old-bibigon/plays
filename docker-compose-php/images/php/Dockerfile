@@ -1,5 +1,5 @@
 # Для начала указываем исходный образ, он будет использован как основа
-FROM php:7.1-fpm
+FROM php:7.4-fpm
 # Необязательная строка с указанием автора образа
 MAINTAINER PHPtoday.ru <info@phptoday.ru>
 
@@ -14,9 +14,11 @@ RUN apt-get update && apt-get install -y \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libmcrypt-dev \
-        libpng12-dev \
-    && docker-php-ext-install -j$(nproc) iconv mcrypt mbstring mysqli pdo_mysql zip \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+        libpng-dev \
+        libonig-dev \
+    && apt-get clean
+
+RUN docker-php-ext-install -j$(nproc) iconv mbstring mysqli pdo_mysql \
     && docker-php-ext-install -j$(nproc) gd
     
 # Куда же без composer'а.
