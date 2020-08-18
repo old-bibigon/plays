@@ -26,6 +26,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 # Добавим свой php.ini, можем в нем определять свои значения конфига
 ADD php.ini /usr/local/etc/php/conf.d/40-custom.ini
+ADD php-fpm.conf /usr/local/etc/php-fpm.d/zz-docker.conf
 
 # Указываем рабочую директорию для PHP
 WORKDIR /var/www
@@ -33,4 +34,5 @@ WORKDIR /var/www
 # Запускаем контейнер
 # Из документации: The main purpose of a CMD is to provide defaults for an executing container. These defaults can include an executable, 
 # or they can omit the executable, in which case you must specify an ENTRYPOINT instruction as well.
+#EXPOSE 80
 CMD ["php-fpm"]
