@@ -27,11 +27,6 @@ services:
     restart: on-failure
     depends_on:
       - postgres
-    environment:
-        FLASK_APP: project/__init__.py
-        PSQL_URI: "postgresql://psql:example@postgres/playdb"
-    command: python manage.py run -h 0.0.0.0
-#    volumes:
-#      - ./python/src:/home/user/web
-    ports:
-        - 5000:5000
+    env_file:
+      - ./.env
+    command: gunicorn --bind 0.0.0.0:5000 manage:app
