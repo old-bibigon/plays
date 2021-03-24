@@ -1,0 +1,37 @@
+# Use postgres/example user/password credentials
+version: '3.1'
+
+services:
+  nginx:
+    image: nginx:1.19
+    restart: always
+    ports:
+        - 9000:80
+    volumes:
+        - ./nginx:/etc/nginx/conf.d
+
+  postgres:
+    image: postgres:13
+    restart: always
+    volumes:
+#      - ./data:/var/lib/postgresql/
+      - /var/lib/postgresql/
+    environment:
+      POSTGRES_USER: psql
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: playdb
+
+
+  python:
+    build: ./python
+    restart: on-failure
+    depends_on:
+      - postgres
+    environment:
+        FLASK_APP: project/__init__.py
+        PSQL_URI: "postgresql://psql:example@postgres/playdb"
+    command: python manage.py run -h 0.0.0.0
+#    volumes:
+#      - ./python/src:/home/user/web
+    ports:
+        - 5000:5000
